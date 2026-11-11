@@ -573,3 +573,52 @@ section.nums{background:#fff;color:var(--ink);padding:0;border-bottom:1px solid 
 .lc .cmpchk:has(input:checked) .ci{display:inline}
 .lc .cmpchk:has(input:focus-visible){outline:3px solid var(--brand-600);outline-offset:2px}
 .lc .cmpchk:hover{border-color:var(--brand-600)}
+
+/* ===== equal box sizes: every row in a grid of boxes is as tall as the tallest box ===== */
+.grid3,.fgrid,.xgrid,.catgrid,.cats,.cmp-pick{grid-auto-rows:1fr}
+.grid3>*,.fgrid>*,.xgrid>*,.catgrid>*,.cats>*{height:100%;box-sizing:border-box}
+/* long names never make one box taller than the rest */
+.lc h3{display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.lc .tags{min-height:2rem;align-content:flex-start}
+.card{display:flex;flex-direction:column}
+.card .arrow:last-child{margin-top:auto}
+
+/* ===== ONE box size for the whole site: 3 equal columns, same fixed height ===== */
+:root{--box-h:290px}
+.grid3,.fgrid,.xgrid,.catgrid{grid-template-columns:repeat(3,minmax(0,1fr));grid-auto-rows:var(--box-h);gap:1.2rem}
+.grid3>*,.fgrid>*,.xgrid>*,.catgrid>*{height:var(--box-h);min-height:0;overflow:hidden}
+/* home category tiles: stack photo above text so they fit the same box */
+.cg{flex-direction:column;align-items:flex-start;justify-content:flex-start;gap:.8rem;padding:1.2rem}
+.cg img{width:84px;height:84px}
+.cg b{font-size:1.15rem}
+.cg small{font-size:.85rem}
+.fc{justify-content:flex-start}
+.xc{justify-content:flex-start}
+.empty{grid-column:1/-1;height:auto!important}
+@media(max-width:960px){.grid3,.fgrid,.xgrid,.catgrid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:620px){.grid3,.fgrid,.xgrid,.catgrid{grid-template-columns:1fr}}
+
+/* ===== smaller standard box ===== */
+:root{--box-h:230px}
+.lc .tags{flex-wrap:nowrap;overflow:hidden;min-height:0}
+.lc .tags .t{white-space:nowrap;flex:none}
+.lc{padding:1.05rem 1.15rem;gap:.55rem}
+.lc .mk{width:44px;height:44px;font-size:.95rem}
+.lc h3{font-size:1.05rem}
+.lf2{padding-top:.7rem}
+.lf2 .fee b{font-size:.78rem;padding:.1rem .5rem}
+.lc .cmpchk{padding:.28rem .75rem}
+#how .card{padding:1.1rem 1.2rem;gap:.35rem}
+#how .card .ico{width:34px;height:34px;margin-bottom:0}
+#how .card h3{font-size:1.05rem;margin:0}
+#how .card p{font-size:.88rem;line-height:1.5}
+#how .card::after{top:16px;right:16px;width:32px;height:32px;font-size:1rem}
+.cg{padding:1rem;gap:.55rem}
+.cg img{width:60px;height:60px}
+.cg b{font-size:1.02rem}
+.cg small{font-size:.8rem}
+.fc{padding:1rem 1.15rem}
+.fc h4{font-size:1.08rem}
+.xc{padding:1rem 1.15rem}
+.xc .xi{margin-bottom:.4rem}
+.card{padding:1.05rem 1.2rem}
