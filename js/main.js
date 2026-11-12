@@ -361,3 +361,26 @@ $("#enquiry-form")?.addEventListener("submit",e=>{
   window.open(`${wa}?text=${encodeURIComponent(msg)}`,"_blank","noopener");
   e.target.reset();
 });
+
+// ---------- home: quick enquiry popup, shown once per visit on the first scroll
+(()=>{
+  const m=$("#qe"); if(!m) return;
+  let seen=false; try{seen=sessionStorage.getItem("qe")==="1"}catch(e){}
+  let last=null;
+  $("#qe-colleges").innerHTML=COLLEGES.map(c=>`<option value="${esc(c.name)}">`).join("");
+  $("#qe-city").insertAdjacentHTML("beforeend",[...new Set(COLLEGES.map(c=>c.city))].sort().map(c=>`<option>${esc(c)}</option>`).join(""));
+  const open=()=>{ if(seen||!m.hidden) return; seen=true; try{sessionStorage.setItem("qe","1")}catch(e){}
+    last=document.activeElement; m.hidden=false; document.body.classList.add("qe-open"); m.querySelector("input").focus(); };
+  const close=()=>{ m.hidden=true; document.body.classList.remove("qe-open"); last&&last.focus&&last.focus(); };
+  const onScroll=()=>{ if((document.documentElement.scrollTop||document.body.scrollTop)>30){ removeEventListener("scroll",onScroll); open(); } };
+  if(!seen) addEventListener("scroll",onScroll,{passive:true});
+  m.addEventListener("click",e=>{ if(e.target===m||e.target.closest(".qe-x")) close(); });
+  addEventListener("keydown",e=>{ if(e.key==="Escape"&&!m.hidden) close(); });
+  $("#qe-form").addEventListener("submit",e=>{
+    e.preventDefault(); const f=new FormData(e.target);
+    const bits=[f.get("college")&&`College: ${f.get("college")}`,f.get("city")&&`City: ${f.get("city")}`,f.get("course")&&`Programme: ${f.get("course")}`].filter(Boolean).join(". ");
+    const msg=`Hi, I'm ${f.get("name")} (${f.get("phone")}, ${f.get("email")}). ${bits}`;
+    window.open(`${wa}?text=${encodeURIComponent(msg)}`,"_blank","noopener");
+    e.target.reset(); close();
+  });
+})();
