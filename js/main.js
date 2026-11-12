@@ -224,7 +224,8 @@ if(feat) feat.innerHTML=[["engineering","B.Tech","Computer Science"],["managemen
 const sg=$("#state-grid");
 if(sg) sg.innerHTML=states.map(s=>{
   const rows=COLLEGES.filter(c=>c.state===s), cs=uniq(rows.map(c=>c.city));
-  return `<a class="card" href="colleges.html?state=${encodeURIComponent(s)}"><h3>${esc(s)}</h3><p>${plural(rows.length,"institution")} in ${plural(cs.length,"city").replace("citys","cities")}</p><p class="subtle">${esc(cs.slice(0,4).join(", "))}${cs.length>4?" and more":""}</p><span class="arrow">View colleges &rarr;</span></a>`;
+  const cn=plural(cs.length,"city").replace("citys","cities");
+  return `<a class="sc" href="colleges.html?state=${encodeURIComponent(s)}"><div class="sc-top"><span class="sc-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 21s-7-6.2-7-11a7 7 0 0 1 14 0c0 4.8-7 11-7 11z"/><circle cx="12" cy="10" r="2.5"/></svg></span><span class="sc-n"><b>${rows.length}</b> ${rows.length===1?"institution":"institutions"}</span></div><h3>${esc(s)}</h3><p class="subtle">${cn}: ${esc(cs.slice(0,3).join(", "))}${cs.length>3?" and more":""}</p><span class="arrow">View colleges &rarr;</span></a>`;
 }).join("");
 
 // ---------- compare page (up to 3 colleges)
