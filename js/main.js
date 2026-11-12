@@ -389,3 +389,7 @@ $("#enquiry-form")?.addEventListener("submit",e=>{
     e.target.reset(); close();
   });
 })();
+
+// shorter search placeholder on phones so it fits the one-row search bar
+(()=>{ const f=$("#fq"); if(!f) return; const full=f.placeholder, mq=matchMedia("(max-width:620px)");
+  const set=()=>{ f.placeholder=mq.matches?"Search college or city":full; }; set(); mq.addEventListener("change",set); })();
