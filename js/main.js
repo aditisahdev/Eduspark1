@@ -370,8 +370,11 @@ $("#enquiry-form")?.addEventListener("submit",e=>{
   let last=null;
   $("#qe-colleges").innerHTML=COLLEGES.map(c=>`<option value="${esc(c.name)}">`).join("");
   $("#qe-city").insertAdjacentHTML("beforeend",[...new Set(COLLEGES.map(c=>c.city))].sort().map(c=>`<option>${esc(c)}</option>`).join(""));
-  const open=()=>{ if(seen||!m.hidden) return; seen=true; try{sessionStorage.setItem("qe","1")}catch(e){}
-    last=document.activeElement; m.hidden=false; document.body.classList.add("qe-open"); m.querySelector("input").focus(); };
+  const show=()=>{ if(!m.hidden) return; last=document.activeElement; m.hidden=false; document.body.classList.add("qe-open"); m.querySelector("input").focus(); };
+  const open=()=>{ if(seen||!m.hidden) return; seen=true; try{sessionStorage.setItem("qe","1")}catch(e){}; show(); };
+  const hc=$(".hcta"); if(hc) hc.insertAdjacentHTML("afterbegin",'<button type="button" class="hbtn hbtn-inq qe-trigger" aria-haspopup="dialog">Inquiry Now</button>');
+  const nv=$("header nav ul"); if(nv) nv.insertAdjacentHTML("beforeend",'<li class="nav-inq"><button type="button" class="qe-trigger" aria-haspopup="dialog">Inquiry Now</button></li>');
+  document.addEventListener("click",e=>{ if(e.target.closest(".qe-trigger")){ seen=true; try{sessionStorage.setItem("qe","1")}catch(x){}; show(); } });
   const close=()=>{ m.hidden=true; document.body.classList.remove("qe-open"); last&&last.focus&&last.focus(); };
   const onScroll=()=>{ if((document.documentElement.scrollTop||document.body.scrollTop)>30){ removeEventListener("scroll",onScroll); open(); } };
   if(!seen) addEventListener("scroll",onScroll,{passive:true});
