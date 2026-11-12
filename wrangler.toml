@@ -1,0 +1,8 @@
+name = "eduspark"
+compatibility_date = "2025-01-01"
+pages_build_output_dir = ".cf-dist"
+
+[[d1_databases]]
+binding = "DB"
+database_name = "eduspark-db"
+database_id = "59ce7cb1-acf9-4411-88fb-f4f8355bc080"

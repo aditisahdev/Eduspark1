@@ -1,1 +1,7 @@
 data/
+.vercel
+.env*
+.dev.vars
+.cf-dist/
+.wrangler/
+node_modules/
