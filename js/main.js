@@ -54,7 +54,7 @@ const ckey=c=>c.name+"|"+c.city;
 let saved=store.get("eduspark.saved"), cmpSel=store.get("eduspark.cmp").slice(0,3);
 let renderShortlist=null;
 const HEART=`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.7l-1-1.1a5.5 5.5 0 0 0-7.8 7.8l1 1.1L12 21l7.8-7.5 1-1.1a5.5 5.5 0 0 0 0-7.8z"/></svg>`;
-const card=c=>`<article class="lc" data-k="${esc(ckey(c))}"><div class="lt"><span class="mk">${init(c)}</span><div><h3><a href="contact.html">${esc(c.name)}</a></h3><span class="loc">${PIN}${esc(c.city)}<em>${esc(c.state)}</em></span></div></div>
+const card=c=>`<article class="lc" data-k="${esc(ckey(c))}"><div class="lt">${c.logo?`<span class="mk logo"><img src="${esc(c.logo)}" alt="" loading="lazy"></span>`:`<span class="mk">${init(c)}</span>`}<div><h3><a href="contact.html">${esc(c.name)}</a></h3><span class="loc">${PIN}${esc(c.city)}<em>${esc(c.state)}</em></span></div></div>
   <div class="tagrow"><div class="tags">${c.courses.slice(0,3).map(t=>`<span class="t">${esc(t)}</span>`).join("")}</div>
     <label class="cmpchk"><input type="checkbox"${cmpSel.includes(ckey(c))?" checked":""}><span class="co">+ Compare</span><span class="ci">&check; Added</span></label></div>
   <div class="lf3"><span class="fee">Fees: <b>Not published</b></span>${c.site?`<a class="site" href="https://${esc(c.site)}" target="_blank" rel="noopener noreferrer nofollow">Official site <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7M8 7h9v9"/></svg></a>`:`<span class="site off">Website not published</span>`}</div></article>`;
