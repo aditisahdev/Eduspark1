@@ -706,3 +706,12 @@ section.nums{background:#fff;color:var(--ink);padding:0;border-bottom:1px solid 
 .enq .form{background:#fff;border:1px solid var(--line);border-radius:16px;padding:1.8rem;box-shadow:0 18px 40px -18px rgba(10,27,77,.25);border-top:4px solid var(--brand-600)}
 .enq .form .btn{width:100%}
 @media(max-width:960px){.enq .wrap{grid-template-columns:1fr;gap:2rem}}
+.filters .sbox,.filters select{border-radius:999px}
+.filters .sbox{padding:0 1.2rem}
+.filters select{padding-left:1.2rem;padding-right:1rem}
+.filters .sbox input{padding:.55rem 0;font-size:.92rem}
+.filters select{padding-top:.5rem;padding-bottom:.5rem;font-size:.92rem;min-width:130px;max-width:190px}
+.filters .sbox{max-width:340px}
+.pagehead:has(.filters){text-align:center}
+.pagehead:has(.filters) .lead{margin-inline:auto}
+.pagehead:has(.filters) .filters{justify-content:center}
