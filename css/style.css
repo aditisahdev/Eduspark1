@@ -622,3 +622,44 @@ section.nums{background:#fff;color:var(--ink);padding:0;border-bottom:1px solid 
 .xc{padding:1rem 1.15rem}
 .xc .xi{margin-bottom:.4rem}
 .card{padding:1.05rem 1.2rem}
+
+/* Explore page boxes: icon, name, course list, link pinned to the bottom */
+.xc{justify-content:flex-start;gap:.3rem;padding:1.2rem 1.3rem}
+.xc .xi{margin-bottom:.5rem}
+.xc small{display:block;margin-top:.25rem;color:var(--muted);font-size:.9rem;line-height:1.5}
+.xc span{margin-top:auto!important;color:var(--brand-600);font-weight:600;font-size:.92rem}
+
+/* ===== compact standard box: 180px ===== */
+:root{--box-h:180px}
+.lc{padding:.9rem 1.05rem;gap:.5rem}
+.lc .lt{gap:.75rem}
+.lc .mk{width:40px;height:40px;font-size:.88rem}
+.lc h3{font-size:1rem;-webkit-line-clamp:2}
+.lc .loc{font-size:.8rem;margin-top:.1rem}
+.tagrow{display:flex;align-items:center;justify-content:space-between;gap:.5rem}
+.tagrow .tags{flex:1;min-width:0;margin:0}
+.tagrow .cmpchk{flex:none}
+.lf3{margin-top:auto;padding-top:.55rem;border-top:1px solid var(--line);display:flex;justify-content:space-between;align-items:center;gap:.6rem;font-size:.82rem;color:var(--subtle)}
+.lf3 .fee b{font-weight:500;color:var(--muted)}
+.lf3 .site{display:inline-flex;align-items:center;gap:.3rem;color:var(--brand-600);font-weight:600;font-size:.85rem}
+.lf3 .site svg{width:13px;height:13px}
+.lf3 .site:hover{text-decoration:underline}
+.lf3 .site.off{font-weight:400;color:var(--subtle);font-size:.78rem}
+.lc .t{font-size:.72rem;padding:.1rem .55rem}
+.lc .cmpchk{padding:.22rem .65rem;font-size:.74rem}
+#how .card .ico{display:none}
+#how .card{padding:1rem 1.15rem;gap:.3rem}
+#how .card p{font-size:.86rem;line-height:1.45}
+.cg{padding:.85rem 1rem;gap:.45rem}
+.cg img{width:54px;height:54px}
+.fc{padding:.9rem 1.1rem}
+.xc{padding:.95rem 1.15rem}
+.xc small{font-size:.85rem;line-height:1.4}
+#state-grid .card .subtle{display:-webkit-box;-webkit-line-clamp:1;-webkit-box-orient:vertical;overflow:hidden}
+.card{padding:.9rem 1.1rem}
+
+/* Explore page search: smaller */
+.sbox.big{max-width:440px;padding:0 .9rem;border-radius:8px}
+.sbox.big input{padding:.6rem 0;font-size:.92rem}
+.sbox.big svg{width:16px;height:16px}
+.cx .lead{margin:.5rem 0 1.1rem}
