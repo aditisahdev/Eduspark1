@@ -941,3 +941,24 @@ body.qe-open{overflow:hidden}
 .qe .btn::after{content:"";position:absolute;top:0;left:-60%;width:40%;height:100%;background:linear-gradient(100deg,transparent,rgba(255,255,255,.45),transparent);transform:skewX(-20deg);animation:qeshine 2.6s ease-in-out 1.2s infinite}
 @keyframes qeshine{0%{left:-60%}55%,100%{left:130%}}
 @media(prefers-reduced-motion:reduce){.qe,.qe-card,.qe-card>*,.qe form>*,.qe .btn::after{animation:none!important;opacity:1!important}}
+/* sticky "Inquiry Now" tab, left edge */
+.qe-tab{position:fixed;left:0;top:50%;transform:translateY(-50%);z-index:35;writing-mode:vertical-rl;transform:translateY(-50%) rotate(180deg);padding:1.1rem .7rem;border:0;border-radius:0 12px 12px 0;background:linear-gradient(180deg,var(--brand-600),var(--brand-800));color:#fff;font:600 .92rem/1 var(--sans,inherit);letter-spacing:.04em;cursor:pointer;box-shadow:0 12px 26px -10px rgba(11,95,190,.8);transition:padding .15s,box-shadow .15s}
+.qe-tab:hover{padding-right:1.05rem;box-shadow:0 16px 30px -10px rgba(11,95,190,.9)}
+.qe-tab:focus-visible{outline:3px solid #fff;outline-offset:-5px}
+body.qe-open .qe-tab{display:none}
+@media(max-width:620px){.qe-tab{font-size:.8rem;padding:.9rem .55rem}}
+@media(prefers-reduced-motion:reduce){.qe-tab{transition:none}}
+/* Inquiry Now in the nav bar */
+.hbtn-inq{background:var(--brand-600);color:#fff;cursor:pointer;box-shadow:0 8px 18px -10px rgba(11,95,190,.9)}
+.hbtn-inq:hover{background:var(--brand-700,#0A4FA0)}
+.nav-inq{display:none}
+@media(max-width:620px){.nav-inq{display:block}.nav-inq button{width:100%;padding:.8rem 1rem;border:0;border-radius:12px;background:var(--brand-600);color:#fff;font:600 1rem/1 inherit;cursor:pointer}}
+.hbtn{white-space:nowrap}.qe-tab{white-space:nowrap}
+@media(min-width:621px) and (max-width:1380px){.hbtn-wa{width:40px;padding:0}.hbtn-wa span{display:none}}
+@media(max-width:620px){
+  .hcta{display:flex;margin-left:auto}
+  .hcta .hbtn-call,.hcta .hbtn-wa{display:none}
+  .hbtn-inq{height:36px;padding:0 .95rem;font-size:.85rem}
+  .nav-inq{display:none}
+}
+@media(max-width:620px){.menu-btn{margin-left:.25rem!important}.hcta{margin-left:auto!important}}
