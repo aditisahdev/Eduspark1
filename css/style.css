@@ -1002,3 +1002,13 @@ body.qe-open .qe-tab{display:none}
   .filters .sbox{max-width:none;width:100%}
   .filters select{width:100%;max-width:none;min-width:0;box-sizing:border-box;padding:.7rem 1.2rem;text-align:left}
 }
+.qe-msg{margin:.9rem 0 0;font-weight:600}
+.qe-msg:empty{display:none}
+.qe-msg.ok{display:grid;gap:.15rem;background:#E8F6EE;color:#14663A;border:1px solid #BFE3CD;border-radius:14px;padding:.9rem 1rem .9rem 3.1rem;position:relative;animation:qeok .45s cubic-bezier(.2,1.3,.3,1) both}
+.qe-msg.ok::before{content:"\2713";position:absolute;left:.9rem;top:50%;transform:translateY(-50%);width:28px;height:28px;border-radius:50%;background:#1F8A4C;color:#fff;display:grid;place-items:center;font-size:1rem;line-height:1}
+.qe-msg.ok strong{font-size:1rem}
+.qe-msg.ok span{font-weight:400;font-size:.9rem}
+.qe-msg.bad{background:#FDECEA;color:#B42318;border-radius:12px;padding:.7rem 1rem}
+@keyframes qeok{from{opacity:0;transform:scale(.94)}to{opacity:1;transform:none}}
+.qe .btn:disabled{opacity:.7;cursor:wait}
+@media(prefers-reduced-motion:reduce){.qe-msg.ok{animation:none}}

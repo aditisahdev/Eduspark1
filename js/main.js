@@ -8,6 +8,9 @@ const esc = s => s.replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':
 const uniq = a => [...new Set(a)].sort((x,y)=>x.localeCompare(y));
 const states = uniq(COLLEGES.map(c=>c.state));
 const wa = `https://wa.me/${PHONE}`;
+// save the enquiry for the admin panel (needs server.js); WhatsApp still opens either way
+const saveEnquiry = d => fetch("/api/enquiry",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify(d)}).then(r=>r.ok).catch(()=>false);
+
 const plural = (n,w) => `${n} ${w}${n===1?"":"s"}`;
 
 // course tokens in the directory data, most common first
@@ -353,14 +356,15 @@ $$(".nums b").forEach(b=>{
   new IntersectionObserver((es,io)=>es.forEach(en=>{if(en.isIntersecting){run();io.disconnect();}}),{threshold:.4}).observe(b);
 });
 
-// ---------- enquiry form: no backend yet, opens WhatsApp with the details
-$("#enquiry-form")?.addEventListener("submit",e=>{
+// ---------- enquiry form: saves to the admin panel
+$("#enquiry-form")?.addEventListener("submit",async e=>{
   e.preventDefault();
-  const f=new FormData(e.target);
-  const msg=`Hi, I'm ${f.get("name")} (${f.get("phone")}). Interested in ${f.get("course")}. ${f.get("msg")?"Score/rank: "+f.get("msg"):""}`;
-  $("#note").textContent="Opening WhatsApp to send your enquiry…";
-  window.open(`${wa}?text=${encodeURIComponent(msg)}`,"_blank","noopener");
-  e.target.reset();
+  const form=e.target, f=new FormData(form), btn=form.querySelector("button[type=submit]"), label=btn.innerHTML;
+  btn.disabled=true; btn.textContent="Sending…"; $("#note").textContent="";
+  const ok=await saveEnquiry({name:f.get("name"),phone:f.get("phone"),course:f.get("course"),message:f.get("msg")?"Score/rank: "+f.get("msg"):"",source:location.pathname.includes("contact")?"contact":"home"});
+  btn.disabled=false; btn.innerHTML=label;
+  $("#note").textContent=ok?"Thank you! We have received your enquiry and will contact you shortly.":"Could not send right now. Please try again, or call us.";
+  if(ok) form.reset();
 });
 
 // ---------- home: quick enquiry popup, shown once per visit on the first scroll
@@ -381,12 +385,16 @@ $("#enquiry-form")?.addEventListener("submit",e=>{
   if(!seen) setTimeout(()=>{ removeEventListener("scroll",onScroll); open(); },7000); // short pages that do not scroll
   m.addEventListener("click",e=>{ if(e.target===m||e.target.closest(".qe-x")) close(); });
   addEventListener("keydown",e=>{ if(e.key==="Escape"&&!m.hidden) close(); });
-  $("#qe-form").addEventListener("submit",e=>{
-    e.preventDefault(); const f=new FormData(e.target);
-    const bits=[f.get("college")&&`College: ${f.get("college")}`,f.get("city")&&`City: ${f.get("city")}`,f.get("course")&&`Programme: ${f.get("course")}`].filter(Boolean).join(". ");
-    const msg=`Hi, I'm ${f.get("name")} (${f.get("phone")}, ${f.get("email")}). ${bits}`;
-    window.open(`${wa}?text=${encodeURIComponent(msg)}`,"_blank","noopener");
-    e.target.reset(); close();
+  const form=$("#qe-form"), btn=form.querySelector("button[type=submit]");
+  form.insertAdjacentHTML("afterend",'<p class="qe-msg" role="status" aria-live="polite"></p>');
+  const msg=$(".qe-msg");
+  form.addEventListener("submit",async e=>{
+    e.preventDefault(); const f=new FormData(form);
+    msg.textContent=""; msg.className="qe-msg"; btn.disabled=true; const label=btn.innerHTML; btn.textContent="Sending…";
+    const ok=await saveEnquiry({name:f.get("name"),phone:f.get("phone"),email:f.get("email"),college:f.get("college"),city:f.get("city"),course:f.get("course"),source:"popup"});
+    btn.disabled=false; btn.innerHTML=label;
+    if(ok){ form.reset(); msg.className="qe-msg ok"; msg.innerHTML="<strong>Congratulations! Your enquiry is sent.</strong><span>Thank you. We have received it and our counsellor will contact you shortly.</span>"; setTimeout(close,2800); }
+    else { msg.className="qe-msg bad"; msg.textContent="Could not send right now. Please try again, or call us."; }
   });
 })();
 
