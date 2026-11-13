@@ -1012,3 +1012,59 @@ body.qe-open .qe-tab{display:none}
 @keyframes qeok{from{opacity:0;transform:scale(.94)}to{opacity:1;transform:none}}
 .qe .btn:disabled{opacity:.7;cursor:wait}
 @media(prefers-reduced-motion:reduce){.qe-msg.ok{animation:none}}
+/* separate "Congratulations" popup */
+.qe-ok{position:fixed;inset:0;z-index:300;display:grid;place-items:center;padding:1rem;background:rgba(10,27,77,.6);backdrop-filter:blur(3px);animation:qefade .3s ease both}
+.qe-ok[hidden]{display:none}
+.qe-ok-card{width:min(400px,100%);background:#fff;border-radius:26px;padding:2.2rem 1.8rem 1.8rem;text-align:center;box-shadow:0 40px 80px -30px rgba(10,27,77,.7);animation:qepop .55s cubic-bezier(.2,1.2,.3,1) both}
+.qe-ok-ico{width:84px;height:84px;margin:0 auto 1rem;border-radius:50%;background:#E8F6EE;display:grid;place-items:center;animation:qering 1.6s ease-out .2s both}
+.qe-ok-ico svg{width:64px;height:64px;fill:none;stroke:#1F8A4C;stroke-width:3;stroke-linecap:round;stroke-linejoin:round}
+.qe-ok-ico circle{stroke-dasharray:152;stroke-dashoffset:152;animation:qedraw .6s ease .15s forwards}
+.qe-ok-ico path{stroke-dasharray:40;stroke-dashoffset:40;animation:qedraw .4s ease .6s forwards}
+@keyframes qedraw{to{stroke-dashoffset:0}}
+@keyframes qering{0%{box-shadow:0 0 0 0 rgba(31,138,76,.35)}100%{box-shadow:0 0 0 26px rgba(31,138,76,0)}}
+.qe-ok-card h2{margin:0 0 .4rem;font-size:1.7rem;color:var(--ink)}
+.qe-ok-card p{margin:0 0 1.3rem;color:var(--muted)}
+.qe-ok-card .btn{min-width:140px}
+@media(prefers-reduced-motion:reduce){.qe-ok,.qe-ok-card,.qe-ok-ico,.qe-ok-ico circle,.qe-ok-ico path{animation:none!important}.qe-ok-ico circle,.qe-ok-ico path{stroke-dashoffset:0}}
+/* compact enquiry forms on phones */
+@media(max-width:620px){
+  .qe{padding:.6rem}
+  .qe-card{padding:1.1rem 1rem 1rem;border-radius:20px;max-height:calc(100vh - 1.2rem)}
+  .qe-card>.eyebrow{font-size:.7rem;margin:0}
+  .qe h2{font-size:1.3rem;margin:.1rem 0 .25rem;padding-right:2.4rem}
+  .qe-sub{font-size:.84rem;line-height:1.4;margin:0 0 .75rem}
+  .qe-x{top:.7rem;right:.7rem;width:34px;height:34px}
+  .qe form{gap:.6rem}
+  .qe label{gap:.2rem;font-size:.8rem}
+  .qe input,.qe select{padding:.55rem .8rem;font-size:.9rem;border-radius:10px}
+  .qe-row{grid-template-columns:1fr 1fr!important;gap:.6rem}
+  .qe .btn{padding:.7rem;font-size:.95rem;border-radius:10px}
+  .qe-ok-card{padding:1.6rem 1.2rem 1.3rem}
+  /* Contact / home enquiry form */
+  .enq .wrap{padding:1rem!important}
+  .enq .form{padding:1rem;gap:.7rem}
+  .enq .form label{font-size:.82rem}
+  .enq .form input,.enq .form select{padding:.6rem 1rem;font-size:.92rem}
+  .enq .form .btn{padding:.75rem}
+  .enq h2{font-size:1.5rem}
+}
+@media(max-width:620px){
+  .enq .cont{flex-direction:row;gap:.6rem;margin-top:1rem}
+  .enq .cbtn{flex:1;min-width:0;padding:.55rem .7rem;gap:.55rem;border-radius:12px}
+  .enq .cbtn svg{width:30px;height:30px;padding:7px}
+  .enq .cbtn span{font-size:.88rem;min-width:0}
+  .enq .cbtn small{font-size:.72rem}
+  .enq-pts{margin-top:.8rem}
+}
+@media(max-width:620px){
+  .pagehead.ctr + .enq .cont{flex-direction:row;gap:.6rem}
+  .pagehead.ctr + .enq .cbtn{width:auto;flex:1}
+  .pagehead.ctr + .enq .wrap{padding:.9rem!important;gap:1rem}
+  .pagehead.ctr + .enq .form{padding:.9rem}
+}
+/* make the close button always clickable: nothing may sit on top of it */
+.qe-x{z-index:5;touch-action:manipulation}
+.qe-card>.eyebrow{margin-right:3.4rem;pointer-events:none}
+.qe-card>h2{margin-right:0;pointer-events:none}
+.qe-x::after{content:"";position:absolute;inset:-6px}
+@media(max-width:620px){.qe-x{width:40px;height:40px}.qe-card>.eyebrow{margin-right:3rem}}

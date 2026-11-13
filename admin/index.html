@@ -25,6 +25,15 @@ button,input,select{font:inherit}
 .btn.ghost{background:#fff;color:var(--blue);border:1px solid var(--line)}
 .btn.ghost:hover{border-color:var(--blue)}
 .err{color:#B42318;min-height:1.4em;margin:.2rem 0 .6rem;font-size:.9rem}
+.pwrow{position:relative;margin-bottom:.8rem}
+.pwrow input{margin-bottom:0;padding-right:3rem}
+.eye{position:absolute;right:.35rem;top:50%;transform:translateY(-50%);width:38px;height:38px;border:0;border-radius:50%;background:none;color:var(--muted);cursor:pointer;display:grid;place-items:center}
+.eye:hover{background:#fff;color:var(--blue)}
+.eye:focus-visible{outline:2px solid var(--blue)}
+.eye svg{width:20px;height:20px}
+.eye .off{display:none}
+.eye[aria-pressed="true"] .on{display:none}
+.eye[aria-pressed="true"] .off{display:block}
 /* app */
 header{background:#fff;border-bottom:1px solid var(--line);padding:.8rem 1.2rem;display:flex;align-items:center;gap:1rem;position:sticky;top:0;z-index:5}
 header h1{font-size:1.1rem;margin:0;flex:1}
@@ -65,7 +74,11 @@ select.st.new{color:var(--blue)}select.st.contacted{color:var(--warn)}select.st.
     <h1>Eduspark admin</h1>
     <p>Sign in to see enquiries.</p>
     <input type="email" id="em" placeholder="Email" autocomplete="username" required autofocus>
-    <input type="password" id="pw" placeholder="Admin password" autocomplete="current-password" required>
+    <div class="pwrow"><input type="password" id="pw" placeholder="Admin password" autocomplete="current-password" required>
+      <button type="button" class="eye" id="eye" aria-label="Show password" aria-pressed="false">
+        <svg class="on" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12z"/><circle cx="12" cy="12" r="3"/></svg>
+        <svg class="off" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M17.9 17.9A10.9 10.9 0 0 1 12 19c-6.5 0-10-7-10-7a18.5 18.5 0 0 1 5.1-5.9M9.9 5.2A10 10 0 0 1 12 5c6.5 0 10 7 10 7a18.6 18.6 0 0 1-2.2 3.2M1 1l22 22M14.1 14.1a3 3 0 0 1-4.2-4.2"/></svg>
+      </button></div>
     <div class="err" id="lerr" role="alert"></div>
     <button class="btn" style="width:100%" type="submit">Sign in</button>
   </form>
@@ -112,6 +125,7 @@ $("#lf").addEventListener("submit", async e => {
   const r = await fetch("/api/admin/login", { method: "POST", credentials: "same-origin", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ email: $("#em").value, password: $("#pw").value }) });
   if (r.ok) { $("#pw").value = ""; show(true); } else $("#lerr").textContent = (await r.json().catch(() => ({}))).error || "Could not sign in";
 });
+$("#eye").onclick = () => { const p = $("#pw"), show = p.type === "password"; p.type = show ? "text" : "password"; $("#eye").setAttribute("aria-pressed", show); $("#eye").setAttribute("aria-label", show ? "Hide password" : "Show password"); p.focus(); };
 $("#logout").onclick = async () => { await fetch("/api/admin/logout", { method: "POST", credentials: "same-origin" }); show(false); };
 
 let t; $("#q").addEventListener("input", () => { clearTimeout(t); t = setTimeout(load, 250); });

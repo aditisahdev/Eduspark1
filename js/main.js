@@ -11,6 +11,25 @@ const wa = `https://wa.me/${PHONE}`;
 // save the enquiry for the admin panel (needs server.js); WhatsApp still opens either way
 const saveEnquiry = d => fetch("/api/enquiry",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify(d)}).then(r=>r.ok).catch(()=>false);
 
+// separate "Congratulations" popup shown after an enquiry is sent
+function showThanks(){
+  let m=document.getElementById("qe-ok");
+  if(!m){
+    document.body.insertAdjacentHTML("beforeend",`<div class="qe-ok" id="qe-ok" role="dialog" aria-modal="true" aria-labelledby="qe-ok-t" hidden><div class="qe-ok-card">
+      <div class="qe-ok-ico"><svg viewBox="0 0 52 52" aria-hidden="true"><circle cx="26" cy="26" r="24"/><path d="M15 27l8 8 15-17"/></svg></div>
+      <h2 id="qe-ok-t">Congratulations!</h2>
+      <p>Your enquiry has been sent. Our counsellor will contact you shortly.</p>
+      <button type="button" class="btn">Done</button></div></div>`);
+    m=document.getElementById("qe-ok");
+    const shut=()=>{ m.hidden=true; document.body.classList.remove("qe-open"); };
+    m.addEventListener("click",e=>{ if(e.target===m||e.target.closest("button")) shut(); });
+    addEventListener("keydown",e=>{ if(e.key==="Escape"&&!m.hidden) shut(); });
+    m._shut=shut;
+  }
+  clearTimeout(m._t); m.hidden=false; document.body.classList.add("qe-open");
+  m.querySelector("button").focus(); m._t=setTimeout(m._shut,6000);
+}
+
 const plural = (n,w) => `${n} ${w}${n===1?"":"s"}`;
 
 // course tokens in the directory data, most common first
@@ -363,26 +382,26 @@ $("#enquiry-form")?.addEventListener("submit",async e=>{
   btn.disabled=true; btn.textContent="Sending…"; $("#note").textContent="";
   const ok=await saveEnquiry({name:f.get("name"),phone:f.get("phone"),course:f.get("course"),message:f.get("msg")?"Score/rank: "+f.get("msg"):"",source:location.pathname.includes("contact")?"contact":"home"});
   btn.disabled=false; btn.innerHTML=label;
-  $("#note").textContent=ok?"Thank you! We have received your enquiry and will contact you shortly.":"Could not send right now. Please try again, or call us.";
-  if(ok) form.reset();
+  if(ok){ form.reset(); $("#note").textContent=""; showThanks(); }
+  else $("#note").textContent="Could not send right now. Please try again, or call us.";
 });
 
 // ---------- home: quick enquiry popup, shown once per visit on the first scroll
 (()=>{
   const m=$("#qe"); if(!m) return;
-  let seen=false; try{seen=sessionStorage.getItem("qe")==="1"}catch(e){}
+  let seen=false, done=false; try{done=sessionStorage.getItem("qe_done")==="1"}catch(e){}  // opens on every page load, until the visitor has sent an enquiry
   let last=null;
   $("#qe-colleges").innerHTML=COLLEGES.map(c=>`<option value="${esc(c.name)}">`).join("");
   $("#qe-city").insertAdjacentHTML("beforeend",[...new Set(COLLEGES.map(c=>c.city))].sort().map(c=>`<option>${esc(c)}</option>`).join(""));
   const show=()=>{ if(!m.hidden) return; last=document.activeElement; m.hidden=false; document.body.classList.add("qe-open"); m.querySelector("input").focus(); };
-  const open=()=>{ if(seen||!m.hidden) return; seen=true; try{sessionStorage.setItem("qe","1")}catch(e){}; show(); };
+  const open=()=>{ if(seen||done||!m.hidden) return; seen=true; show(); };
   const hc=$(".hcta"); if(hc) hc.insertAdjacentHTML("afterbegin",'<button type="button" class="hbtn hbtn-inq qe-trigger" aria-haspopup="dialog">Inquiry Now</button>');
   const nv=$("header nav ul"); if(nv) nv.insertAdjacentHTML("beforeend",'<li class="nav-inq"><button type="button" class="qe-trigger" aria-haspopup="dialog">Inquiry Now</button></li>');
-  document.addEventListener("click",e=>{ if(e.target.closest(".qe-trigger")){ seen=true; try{sessionStorage.setItem("qe","1")}catch(x){}; show(); } });
+  document.addEventListener("click",e=>{ if(e.target.closest(".qe-trigger")){ seen=true; show(); } });
   const close=()=>{ m.hidden=true; document.body.classList.remove("qe-open"); last&&last.focus&&last.focus(); };
   const onScroll=()=>{ if((document.documentElement.scrollTop||document.body.scrollTop)>30){ removeEventListener("scroll",onScroll); open(); } };
-  if(!seen) addEventListener("scroll",onScroll,{passive:true});
-  if(!seen) setTimeout(()=>{ removeEventListener("scroll",onScroll); open(); },7000); // short pages that do not scroll
+  if(!seen&&!done) addEventListener("scroll",onScroll,{passive:true});
+  if(!seen&&!done) setTimeout(()=>{ removeEventListener("scroll",onScroll); open(); },7000); // short pages that do not scroll
   m.addEventListener("click",e=>{ if(e.target===m||e.target.closest(".qe-x")) close(); });
   addEventListener("keydown",e=>{ if(e.key==="Escape"&&!m.hidden) close(); });
   const form=$("#qe-form"), btn=form.querySelector("button[type=submit]");
@@ -393,7 +412,7 @@ $("#enquiry-form")?.addEventListener("submit",async e=>{
     msg.textContent=""; msg.className="qe-msg"; btn.disabled=true; const label=btn.innerHTML; btn.textContent="Sending…";
     const ok=await saveEnquiry({name:f.get("name"),phone:f.get("phone"),email:f.get("email"),college:f.get("college"),city:f.get("city"),course:f.get("course"),source:"popup"});
     btn.disabled=false; btn.innerHTML=label;
-    if(ok){ form.reset(); msg.className="qe-msg ok"; msg.innerHTML="<strong>Congratulations! Your enquiry is sent.</strong><span>Thank you. We have received it and our counsellor will contact you shortly.</span>"; setTimeout(close,2800); }
+    if(ok){ form.reset(); done=true; try{sessionStorage.setItem("qe_done","1")}catch(x){} close(); showThanks(); }
     else { msg.className="qe-msg bad"; msg.textContent="Could not send right now. Please try again, or call us."; }
   });
 })();
