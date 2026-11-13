@@ -1062,3 +1062,9 @@ body.qe-open .qe-tab{display:none}
   .pagehead.ctr + .enq .wrap{padding:.9rem!important;gap:1rem}
   .pagehead.ctr + .enq .form{padding:.9rem}
 }
+/* make the close button always clickable: nothing may sit on top of it */
+.qe-x{z-index:5;touch-action:manipulation}
+.qe-card>.eyebrow{margin-right:3.4rem;pointer-events:none}
+.qe-card>h2{margin-right:0;pointer-events:none}
+.qe-x::after{content:"";position:absolute;inset:-6px}
+@media(max-width:620px){.qe-x{width:40px;height:40px}.qe-card>.eyebrow{margin-right:3rem}}
